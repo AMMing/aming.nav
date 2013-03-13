@@ -11,9 +11,13 @@
 </head>
 <body>
     <div id="test"></div>
+    <div style="padding-left: 500px;">
+        <input type="button" id="btn_show" value="show" />
+        <input type="button" id="btn_hide" value="hide" />
+    </div>
     <script type="text/javascript">
         $(document).ready(function () {
-            $("#test").aming_nav({
+            var datat = $("#test").aming_nav({
                 datalist: [{
                     left: -90,
                     color: "#C5885B",
@@ -45,6 +49,14 @@
                     title: "标题标题标题",
                     link: "http://www.y2443.com"
                 }]
+            });
+
+
+            $("#btn_show").click(function () {
+                datat.shownav();
+            });
+            $("#btn_hide").click(function () {
+                datat.hidenav();
             });
         });
     </script>
