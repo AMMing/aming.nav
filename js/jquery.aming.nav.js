@@ -1,5 +1,5 @@
 ﻿/**
-* $.amingimage
+* $.aming_nav
 * @extends jquery.1.7.1
 * @fileOverview 动态导航
 * @author 阿命
@@ -16,7 +16,7 @@
 *                    imgurl: "images/31532569_200_50_t.jpg",
 *                    title: "[Home]首页",
 *                    link: "http://www.y2443.com",
-                     target: true
+*                    target: true
 *                }]
 *            });
 *
@@ -38,7 +38,7 @@
         nav_count: 0,
 
         //参数为datalist,
-        //datalist里面的结构为 left,color,imgurl,title,link,target,mouseover,mouseover_time
+        //datalist里面的结构为 left,color,imgurl,title,link,target,mouseover,mouseover_time,mouseout
         aming_nav: function (setting, callback) {//默认值
             var sdata = $.extend({
                 datalist: []
@@ -146,6 +146,12 @@
 
                     //移除停留事件延迟
                     clearTimeout(mouseover_setTimeout);
+
+
+                    //如果有设置停留事件的话 再这边处理
+                    if (data.mouseout && (data.mouseout instanceof Function)) {
+                        data.mouseout($nav_frame);
+                    }
                 });
 
                 $nav_img_button.bind("click", function () {
