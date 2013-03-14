@@ -12,21 +12,26 @@
 *    $("input").amingui_text();
 */
 
-(function ($) {
-    //create_nav_item: new Array(),
+(function (window, document, $, undefined) {
     $.extend($.fn, {
-
-        newitem_list: new Array(),
+        //随机的ID
+        random_id: 0,
+        //动画执行中
+        nav_moveing: false,
+        //导航是否显示
+        nav_isshow: false,
 
         aming_nav: function (setting, callback) {//默认值
             var sdata = $.extend({
                 datalist: []
             }, setting);
-            var r_id = parseInt(99999 * Math.random());
+
+            $.fn.random_id = parseInt(99999 * Math.random());
+
             var $renderTo = jQuery(this);
             var $nav_mainframe = jQuery("<div></div>");
             $nav_mainframe.addClass("aming_nav_mainframe");
-            $nav_mainframe.addClass("aming_nav_mainframe" + r_id);
+            $nav_mainframe.addClass("aming_nav_mainframe" + $.fn.random_id);
             $nav_mainframe.css("position", "relative");
             $renderTo.append($nav_mainframe);
 
@@ -63,10 +68,17 @@
                 $nav_title.css("position", "absolute");
                 $nav_title.css("font-family", '"Microsoft YaHei" , "Microsoft JhengHei"');
                 $nav_title.css("line-height", "40px");
-                $nav_title.css("padding", "15px 10px 0px 10px;");
+                $nav_title.css("padding", "15px 10px 0px 10px");
                 $nav_title.css("font-size", "24px");
                 $nav_title.css("bottom", "0");
                 $nav_title.css("right", "0");
+
+                //css3 text_shadow
+                var text_shadow = "#fff 1px 0 0,#fff 0 1px 0,#fff -1px 0 0,#fff 0 -1px 0";
+                $nav_title.css("-webkit-text-shadow", text_shadow);
+                $nav_title.css("-moz-text-shadow", text_shadow);
+                $nav_title.css("text-shadow", text_shadow);
+
 
                 $nav_img_button_defilade.css("position", "absolute");
                 $nav_img_button_defilade.css("width", "400px");
@@ -109,75 +121,90 @@
                 return $nav_frame;
             };
 
-
-            var list = this.newitem_list;
-
             $.each(sdata.datalist, function (index, item) {
                 var $newitem = create_nav_item(item, $nav_mainframe);
                 $newitem.attr("data-index", index);
                 $newitem.css("z-index", 1000 - index);
-                list.push($newitem);
-
+                $newitem.addClass("aming_nav_frame_" + $.fn.random_id);
                 //Temp
                 $newitem.css("top", "-120px");
             });
-            this.create_nav_item
-
 
             return this;
         },
 
-        ////动画执行中
-        //nav_moveing: false,
-        ////导航是否显示
-        //nav_isshow: false,
 
         shownav: function (time) {
-            //if (this.nav_moveing || this.nav_isshow) {
-            //    return;
-            //}
+            if ($.fn.nav_moveing || $.fn.nav_isshow) {
+                return;
+            }
+
             if (!time)
                 time = 300;
 
-            //var moveing = this.nav_moveing;
-            //var isshow = this.nav_isshow;
-            //moveing = true;
-            $.each(this.newitem_list, function (index, item) {
-                var itemcount = this.newitem_list.length;
-                var newtop = index * (100 + 14);
-                var newtime = (index + 1) * time;
-                item.animate({ top: newtop }, newtime, function () {
-                    //if (index + 1 == itemcount) {
-                    //    moveing = false;
-                    //    isshow = true;
-                    //    debugger;
-                    //}
+            var $navs = $(".aming_nav_frame_" + $.fn.random_id);
+            var newtop = 0;
+            var index = 0;
+            var move_animate = function () {
+                if ($navs.length <= index) {
+                    $.fn.nav_moveing = false;
+                    $.fn.nav_isshow = true;
+                    return;
+                }
+
+                newtop = index * (100 + 14);
+                $navs.animate({ top: newtop }, time, function () {
+                    move_animate();
                 });
-            });
+                $navs[index] = null;
+                index++;
+            };
+
+            $.fn.nav_moveing = true;
+            move_animate();
         },
 
         hidenav: function (time) {
-            //if (this.nav_moveing || !this.nav_isshow) {
-            //    return;
-            //}
+            if ($.fn.nav_moveing || !$.fn.nav_isshow) {
+                return;
+            }
+
             if (!time)
                 time = 300;
 
-            //var moveing = this.nav_moveing;
-            //var isshow = this.nav_isshow;
-            //moveing = true;
-            $.each(this.newitem_list, function (index, item) {
-                var itemcount = this.newitem_list.length;
-                var newtop = index * (100 + 14);
-                var newtime = (index + 1) * time;
-                var delaytime = (this.newitem_list.length - index) * time;
-                item.delay(delaytime).animate({ top: -120 }, newtime, function () {
-                    //if (index + 1 == itemcount) {
-                    //    moveing = false;
-                    //    isshow = false;
-                    //}
+            var $navs = $(".aming_nav_frame_" + $.fn.random_id);
+            var newtop = 0;
+            var index = $navs.length;
+            var move_animate = function () {
+                if (index < 0) {
+                    $.fn.nav_moveing = false;
+                    $.fn.nav_isshow = false;
+                    return;
+                }
+
+                $navs = $(".aming_nav_frame_" + $.fn.random_id);
+
+                index--;
+
+
+                for (var i = 0; i < index; i++) {
+                    $navs[i] = null;
+                }
+
+
+
+
+                newtop = index * (100 + 14);
+
+                $navs.animate({ top: newtop }, time, function () {
+                    move_animate();
                 });
-            });
+
+                $navs[index] = null;
+            };
+
+            $.fn.nav_moveing = true;
+            move_animate();
         }
     });
-})(jQuery)
+})(window, document, jQuery);

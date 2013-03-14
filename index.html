@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -10,7 +10,9 @@
 
 </head>
 <body>
-    <div id="test"></div>
+    <div id="test" class="div"></div>
+    <div id="Div1" class="div"></div>
+    <div id="Div2" class="div"></div>
     <div style="padding-left: 500px;">
         <input type="button" id="btn_show" value="show" />
         <input type="button" id="btn_hide" value="hide" />
@@ -22,35 +24,37 @@
                     left: -90,
                     color: "#C5885B",
                     imgurl: "images/31532569_200_50_t.jpg",
-                    title: "标题标题标题",
+                    title: "[Home]首页",
                     link: "http://www.y2443.com"
                 }, {
                     left: -100,
                     color: "#7D52AE",
                     imgurl: "images/32368289_200_50_t.jpg",
-                    title: "标题标题标题",
+                    title: "[Article]文章",
                     link: "http://www.y2443.com"
                 }, {
                     left: -90,
                     color: "#4E69AE",
                     imgurl: "images/31532612_200_50_t.jpg",
-                    title: "标题标题标题",
+                    title: "[Photo]相册",
                     link: "http://www.y2443.com"
                 }, {
                     left: -150,
                     color: "#EC709E",
                     imgurl: "images/34065982_200_50_t.jpg",
-                    title: "标题标题标题",
+                    title: "[Download]下载",
                     link: "http://www.y2443.com"
                 }, {
                     left: -180,
                     color: "#4CAC2A",
                     imgurl: "images/34178791_200_50_t.jpg",
-                    title: "标题标题标题",
+                    title: "[About]关于",
                     link: "http://www.y2443.com"
                 }]
             });
-
+            setTimeout(function () {
+                datat.shownav();
+            }, 800);
 
             $("#btn_show").click(function () {
                 datat.shownav();
