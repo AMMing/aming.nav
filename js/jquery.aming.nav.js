@@ -38,7 +38,7 @@
         nav_count: 0,
 
         //参数为datalist,
-        //datalist里面的结构为 left,color,imgurl,title,link,target
+        //datalist里面的结构为 left,color,imgurl,title,link,target,mouseover,mouseover_time
         aming_nav: function (setting, callback) {//默认值
             var sdata = $.extend({
                 datalist: []
@@ -54,6 +54,10 @@
             $renderTo.append($nav_mainframe);
 
             var create_nav_item = function (data, $frame) {
+                var img_top = 0;
+                if (data.imgtop) {
+                    img_top = data.imgtop;
+                }
                 var $nav_frame = jQuery("<div></div>");
                 var $nav_img_button = jQuery("<div></div>");
                 var $nav_img = jQuery("<img />");
@@ -63,6 +67,7 @@
                 $nav_frame.addClass("aming_nav_frame");
                 $nav_img_button.addClass("aming_nav_img_button");
                 $nav_title.addClass("aming_nav_title");
+                $nav_img.addClass("aming_nav_img");
                 $nav_img_button_defilade.addClass("aming_nav_img_button_defilade");
 
                 $nav_frame.css("position", "absolute");
@@ -77,10 +82,11 @@
                 $nav_img_button.css("overflow", "hidden");
                 $nav_img_button.css("border", "2px solid white");
                 $nav_img_button.css("cursor", "pointer");
+                $nav_img_button.css("background-color", "white");
 
                 $nav_img.css("position", "absolute");
-                $nav_img.css("width", "400px");
-                $nav_img.css("height", "100px");
+                //$nav_img.css("width", "400px");
+                //$nav_img.css("height", "100px");
                 $nav_img.css("border", "2px solid white");
 
                 $nav_title.css("position", "absolute");
@@ -115,17 +121,31 @@
                 $nav_img_button.css("color", data.color);
                 $nav_img.attr("src", data.imgurl);
                 $nav_img.css("left", data.left);
+                $nav_img.css("top", img_top);
+
                 $nav_title.html(data.title);
 
+                var mouseover_setTimeout = null;
                 //bind event
                 $nav_img_button.bind("mouseover", function () {
                     $nav_img_button.stop().animate({ width: 400 }, 300);
                     $nav_img.stop().animate({ left: 0 }, 300);
+
+                    //如果有设置停留事件的话 再这边处理
+                    if (data.mouseover && (data.mouseover instanceof Function)) {
+                        if (!data.mouseover_time)
+                            data.mouseover_time = 1000;
+                        clearTimeout(mouseover_setTimeout);
+                        mouseover_setTimeout = setTimeout(data.mouseover, data.mouseover_time, $nav_frame);
+                    }
                 });
 
                 $nav_img_button.bind("mouseout", function () {
                     $nav_img_button.stop().animate({ width: 204 }, 300);
-                    $nav_img.stop().animate({ left: data.left }, 300);
+                    $nav_img.stop().animate({ left: data.left, top: img_top }, 300);
+
+                    //移除停留事件延迟
+                    clearTimeout(mouseover_setTimeout);
                 });
 
                 $nav_img_button.bind("click", function () {
