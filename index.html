@@ -60,14 +60,20 @@
                 }]
             });
             setTimeout(function () {
-                datat.shownav();
+                datat.shownav(function () {
+                    alert("auto show");
+                });
             }, 800);
 
             $("#btn_show").click(function () {
-                datat.shownav();
+                datat.shownav(function () {
+                    alert("show");
+                });
             });
             $("#btn_hide").click(function () {
-                datat.hidenav();
+                datat.hidenav(function () {
+                    alert("hide");
+                });
             });
         });
     </script>

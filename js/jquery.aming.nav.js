@@ -5,8 +5,8 @@
 * @author 阿命
 * @email y2443@163.com
 * @site wwww.y2443.com
-* @version 1.03.14.0
-* @date 2013-03-14
+* @version 1.03.19.0
+* @date 2013-03-19
 * Copyright (c) 2012-2013 AMing
 * @example
 *     var anav = $("#test").aming_nav({
@@ -27,7 +27,7 @@
 
 (function (window, document, $, undefined) {
     $.extend($.fn, {
-        version: '1.03.14.0',
+        version: '1.03.19.0',
         //随机的ID
         random_id: 0,
         //动画执行中
@@ -190,7 +190,7 @@
             return selector;
         },
         //显示
-        shownav: function (time) {
+        shownav: function (callback, time) {
             if ($.fn.nav_moveing || $.fn.nav_isshow) {
                 return;
             }
@@ -204,6 +204,10 @@
                 if ($.fn.nav_count <= index) {
                     $.fn.nav_moveing = false;
                     $.fn.nav_isshow = true;
+
+                    if (callback && (callback instanceof Function)) {
+                        callback();
+                    }
                     return;
                 }
 
@@ -223,7 +227,7 @@
             move_animate();
         },
 
-        hidenav: function (time) {
+        hidenav: function (callback, time) {
             if ($.fn.nav_moveing || !$.fn.nav_isshow) {
                 return;
             }
@@ -238,6 +242,10 @@
                 if (index < 0) {
                     $.fn.nav_moveing = false;
                     $.fn.nav_isshow = false;
+
+                    if (callback && (callback instanceof Function)) {
+                        callback();
+                    }
                     return;
                 }
 
